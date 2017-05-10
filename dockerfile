@@ -15,22 +15,18 @@ RUN wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGO_VERSION}.
 #COPY leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz /usr/local/bin
 #COPY mongodb-linux-x86_64-${MONGO_VERSION}.tgz /usr/local/bin
 
-RUN tar xf leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz \
-    && tar xf mongodb-linux-x86_64-${MONGO_VERSION}.tgz \
-    && echo "export PATH=$PATH:/usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/bin" >> /etc/profile \
-    && . /etc/profile \
-    && sed -i "s#app.secret.*#app.secret=${APP_SECRET}#g" /usr/local/bin/leanote/conf/app.conf \
-    && mkdir /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/data \
-
+RUN  tar xf leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz
+RUN  tar xf mongodb-linux-x86_64-${MONGO_VERSION}.tgz
+RUN  echo "export PATH=$PATH:/usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/bin" >> /etc/profile 
+RUN  . /etc/profile
+RUN  sed -i "s#app.secret.*#app.secret=${APP_SECRET}#g" /usr/local/bin/leanote/conf/app.conf 
+RUN  mkdir /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/data
+RUN  /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/bin/mongod --dbpath  /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/data & sleep 50 \
+     && /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/bin/mongorestore -h localhost -d leanote --dir /usr/local/bin/leanote/mongodb_backup/leanote_install_data
+    
 EXPOSE 9000
 
-VOLUME /usr/local/bin/leanote/conf
-VOLUME /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/data
+WORKDIR /usr/local/bin/leanote/bin/
 
-WORKDIR /usr/local/bin/leanote/
-
-COPY start.sh  /
-
-CMD bash /start.sh
-
+CMD  . /etc/profile && mongod --dbpath  /usr/local/bin/mongodb-linux-x86_64-${MONGO_VERSION}/data & sleep 30 && bash run.sh
 

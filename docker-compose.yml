@@ -1,0 +1,15 @@
+version: '2'
+services:
+  leanote:
+    image: leanote:latest
+    stdin_open: true
+    volumes:
+    - /opt/svicloud/tools/leanote/conf:/usr/local/bin/leanote/conf
+    - /opt/svicloud/tools/leanote/public:/usr/local/bin/leanote/public
+    - /opt/svicloud/tools/leanote/mongo_data:/usr/local/bin/mongodb-linux-x86_64-3.0.1/data
+    tty: true
+    ports:
+    - 9100:9000/tcp
+#    labels:
+#      io.rancher.container.pull_image: always
+#      io.rancher.scheduler.affinity:host_label: leanote=true
