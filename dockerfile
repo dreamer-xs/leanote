@@ -13,9 +13,6 @@ COPY start.sh  .
 RUN wget https://nchc.dl.sourceforge.net/project/leanote-bin/${LEANOTE_VERSION}/leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz
 RUN wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGO_VERSION}.tgz
 
-#COPY leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz /usr/local/bin
-#COPY mongodb-linux-x86_64-${MONGO_VERSION}.tgz /usr/local/bin
-
 RUN  tar xf leanote-linux-amd64-v${LEANOTE_VERSION}.bin.tar.gz
 RUN  tar xf mongodb-linux-x86_64-${MONGO_VERSION}.tgz
 
